@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const Consignment = () => {
   const [consignments] = useState([
@@ -45,6 +50,21 @@ const Consignment = () => {
     },
   ]);
 
+  const [formData, setFormData] = useState({
+    client: "",
+    product: "",
+    quantity: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Consignação registrada!",
+      description: "A consignação foi cadastrada com sucesso.",
+    });
+    setFormData({ client: "", product: "", quantity: "" });
+  };
+
   const getStatusBadge = (status: string) => {
     if (status === "Em Aberto") {
       return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Em Aberto</Badge>;
@@ -59,10 +79,60 @@ const Consignment = () => {
           <h1 className="text-3xl font-bold text-foreground">Consignação</h1>
           <p className="text-muted-foreground">Controle de entregas e devoluções</p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Nova Consignação
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Nova Consignação
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Registrar Consignação</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="client">Cliente</Label>
+                <Select value={formData.client} onValueChange={(value) => setFormData({ ...formData, client: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o cliente" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="padaria">Padaria Central</SelectItem>
+                    <SelectItem value="mercado">Mercado Silva</SelectItem>
+                    <SelectItem value="lanchonete">Lanchonete Boa Vista</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="product">Produto</Label>
+                <Select value={formData.product} onValueChange={(value) => setFormData({ ...formData, product: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o produto" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tradicional">Pão de Queijo Tradicional</SelectItem>
+                    <SelectItem value="recheado">Pão de Queijo Recheado</SelectItem>
+                    <SelectItem value="integral">Pão de Queijo Integral</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="quantity">Quantidade Entregue (kg)</Label>
+                <Input
+                  id="quantity"
+                  type="number"
+                  value={formData.quantity}
+                  onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                  placeholder="0"
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Registrar Consignação
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
