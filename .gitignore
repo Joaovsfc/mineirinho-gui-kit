@@ -10,7 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-electron
 *.local
+
+# Database files (development)
+*.db
+*.db-shm
+*.db-wal
+mineirinho-dev.db
+mineirinho-dev.db-shm
+mineirinho-dev.db-wal
 
 # Editor directories and files
 .vscode/*
