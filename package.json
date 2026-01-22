@@ -6,6 +6,7 @@
   "author": "Mineirinho de Ouro",
   "main": "electron/main.cjs",
   "type": "module",
+
   "scripts": {
     "dev": "vite",
     "build": "vite build",
